@@ -1,12 +1,12 @@
 const router = require("express").Router();
 const multer = require("multer");
 
-const { register } = require("../controllers/user.controller");
+const { register, login } = require("../controllers/user.controller");
 
 // Multer storage setup
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, "public/uploads")
+        cb(null, "public")
     },
     filename: function(req, file, cb) {
         cb(null, `${Date.now()}-${file.originalname}`)
@@ -24,6 +24,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({storage, fileFilter})
 
-router.post("/register", upload.single('profileImage'), register)
+router.post("/register", upload.single('profileImage'), register);
+router.post("/login", login);
 
 module.exports = router;
