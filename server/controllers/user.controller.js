@@ -22,7 +22,7 @@ const register = async (req, res, next) => {
             return res.status(400).json({message: "user already exists"});
         }
 
-        const user = await User.create({ firstName, lastName, email, password,profileImagePath });
+        const user = await User.create({ firstName, lastName, email, password, profileImagePath });
         res.status(200).json({message: "User registered successfully!", user});
     } catch(err) {
         console.log(err);
@@ -43,7 +43,6 @@ const login = async (req, res, next) => {
             return res.status(401).json({message: "Invalid email or password"}); 
         }
         const token = createSecretToken(user._id);
-        delete user.password;
         res.status(200).json({message: "User registered successfully!", user, token});
     } catch(err) {
         console.log(err);

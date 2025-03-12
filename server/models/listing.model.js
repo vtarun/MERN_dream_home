@@ -32,22 +32,21 @@ const ListingSchema = new mongoose.Schema(
             required: true,
         },
         listingPhotoPaths: [{ type: String }],
-        amenities: [{type: String}],
+        amenities: {type: Array, default: []},
         description: {
-            title: { type: String },
-            description: { type: String },
-            highlight: { type: String },
-            highlightDesc: { type: String },
-            price: { type: Number, default: 0 }
+            title: { type: String, required: true, trim: true },
+            description: { type: String, required: true, trim: true },
+            highlight: { type: String, required: true },
+            highlightDesc: { type: String, required: true },
+            price: { type: Number, required: true, default: 0 }
         },
         location: {
-            streetAddress: { type: String },
-            aptSuite: { type: String },
-            city: { type: String },
-            province: { type: String },
-            country: { type: String }
+            streetAddress: { type: String, required: true, trim: true },
+            aptSuite: { type: String, required: true, trim: true },
+            city: { type: String, required: true, trim: true },
+            province: { type: String, required: true, trim: true },
+            country: { type: String, required: true, trim: true }
         },
-
     }, 
     { timestamps: true}
 );

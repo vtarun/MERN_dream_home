@@ -8,6 +8,7 @@ const app = express();
 const { MONGO_URL, PORT } = process.env;
 
 const authRoutes = require("./routes/auth.route");
+const listingRoutes = require("./routes/listing.route");
 
 
 app.use(cors());
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "public")));
 
 app.use("/auth", authRoutes);
+app.use("/properties", listingRoutes);
 mongoose.connect(MONGO_URL)
   .then(() => {
     console.log('Connected to MongoDB');
