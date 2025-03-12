@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import "../styles/Register.scss";
+import "../styles/register.scss";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -64,10 +64,10 @@ const RegisterPage = () => {
           {!passwordMatch && (<p style={{color: 'red'}}>Password didn't match</p>)}
           <input type="file" id="image" name="profileImage" accept="image/*" style={{display: "none"}}  onChange={handleChange} required/>
           <label htmlFor="image">
-            <img src="/assets/addImage.png" alt="add profile photo"/>
+            <img src="/assets/addImage.png" alt="add profile pic"/>
             <p>Upload Your Photo</p>
           </label>
-          {formData.profileImage && <img src={URL.createObjectURL(formData.profileImage)} alt="profile photo" style={{ maxWidth: '80px'}} />}
+          {formData.profileImage && <img src={URL.createObjectURL(formData.profileImage)} alt="profile pic" style={{ maxWidth: '80px'}} />}
           <button type="submit" disabled={!passwordMatch}>Register</button>
         </form>
         <Link to="/login">Already have an account? Log In Here</Link>

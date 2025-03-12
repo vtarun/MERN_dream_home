@@ -1,7 +1,7 @@
-import React from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate, Link } from "react-router-dom";
 import { setLogin } from '../redux/state';
-import { useDispatch } from "../react-redux";
+import { useDispatch } from "react-redux";
 
 import "../styles/login.scss";
 
@@ -26,7 +26,7 @@ const LoginPage = () => {
       });
       const loginData = await response.json();
 
-      if(responseData){
+      if(loginData){
         dispatch(
           setLogin({
             user: loginData.user,
