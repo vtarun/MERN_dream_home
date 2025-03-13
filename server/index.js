@@ -9,6 +9,7 @@ const { MONGO_URL, PORT } = process.env;
 
 const authRoutes = require("./routes/auth.route");
 const listingRoutes = require("./routes/listing.route");
+const bookingRoutes = require("./routes/booking.route");
 
 
 app.use(cors());
@@ -19,6 +20,7 @@ app.use("/uploads", express.static(path.join(__dirname, "public")));
 
 app.use("/auth", authRoutes);
 app.use("/properties", listingRoutes);
+app.use("/booking", bookingRoutes);
 mongoose.connect(MONGO_URL)
   .then(() => {
     console.log('Connected to MongoDB');
