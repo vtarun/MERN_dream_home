@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const multer = require("multer");
-const { createListing, getListing } = require("../controllers/listing.controller");
+const { createNewListing, getAllListing, getListingById, searchListings } = require("../controllers/listing.controller");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -21,7 +21,10 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({storage, fileFilter});
 
-router.get('/', getListing);
-router.post('/create', upload.array('listingPhotos'), createListing);
+router.get('/', getAllListing);
+router.get("/:listingId", getListingById);
+router.get("/:listingId", getListingById);
+router.get("/search/:search", searchListings);
+router.post('/create', upload.array('listingPhotos'), createNewListing);
 
 module.exports = router;

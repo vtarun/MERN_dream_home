@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Listing = require("../models/listing.model");
 const User = require("../models/user.model");
 
-const createListing = async (req, res) => {
+const createNewListing = async (req, res) => {
     try{
         const {
             creator,
@@ -27,7 +27,8 @@ const createListing = async (req, res) => {
                 highlightDesc,
                 price
             }
-        } = req.body;
+        } = {...req.body, location : JSON.parse(req.body.location), description : JSON.parse(req.body.description)};
+        
 
         const UserExists = await User.findById(creator);
         if(!UserExists){
@@ -76,7 +77,7 @@ const createListing = async (req, res) => {
 };
 
 
-const getListing = async (req, res) => {
+const getAllListing = async (req, res) => {
     const qCategory = req.query.category;
     try{
         let listings;
@@ -93,4 +94,39 @@ const getListing = async (req, res) => {
     }
 };
 
-module.exports = { createListing, getListing };
+/* LISTING DETAILS */
+const getListingById = async (req, res) => {
+    try {
+      const { listingId } = req.params
+      const listing = await Listing.findById(listingId).populate("creator")
+      res.status(202).json(listing)
+    } catch (err) {
+      res.status(404).json({ message: "Listing can not found!", error: err.message })
+    }
+};
+
+const  searchListings =  async (req, res) => {
+    const { search } = req.params
+  
+    try {
+      let listings = [];
+  
+      if (search === "all") {
+        listings = await Listing.find().populate("creator")
+      } else {
+        listings = await Listing.find({
+          $or: [
+            { category: {$regex: search, $options: "i" } },
+            { title: {$regex: search, $options: "i" } },
+          ]
+        }).populate("creator")
+      }
+  
+      res.status(200).json(listings)
+    } catch (err) {
+      res.status(404).json({ message: "Fail to fetch listings", error: err.message })
+      console.log(err)
+    }
+};
+
+module.exports = { createNewListing, getAllListing, getListingById, searchListings };
