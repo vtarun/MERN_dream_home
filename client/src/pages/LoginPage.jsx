@@ -8,6 +8,7 @@ import "../styles/login.scss";
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   
   const dispatch = useDispatch();
 
@@ -15,7 +16,6 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try{
       const response = await fetch("http://localhost:4000/auth/login", {
         method: 'POST',
@@ -25,8 +25,7 @@ const LoginPage = () => {
         body: JSON.stringify({email, password})
       });
       const loginData = await response.json();
-
-      if(loginData){
+      if(response.ok){
         dispatch(
           setLogin({
             user: loginData.user,
@@ -34,6 +33,8 @@ const LoginPage = () => {
           })
         );
         navigate('/');
+      }else{
+        setError(loginData.message);
       }
     } catch(err){
       console.log("Login failed", err?.message);
@@ -48,7 +49,10 @@ const LoginPage = () => {
             type="email"
             placeholder='Email'
             name="email"
-            onChange={(e) => setEmail(e.target.value)} 
+            onChange={(e) => {
+              setError(null);
+              setEmail(e.target.value)
+            }} 
             value={email} 
             required
           />
@@ -56,13 +60,17 @@ const LoginPage = () => {
             type="password"
             placeholder='Password'
             name="password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setError(null);
+              setPassword(e.target.value)
+            }}
             value={password}
             required
           />
           <button type="submit">LOG IN</button>
         </form>
         <Link to="/register">Already have an account? Log In Here</Link>
+        {error && <p style={{color: 'red'}}>{error}</p>}
       </div>
     </div>
   )

@@ -8,6 +8,7 @@ import { IoIosImages } from "react-icons/io";
 import { useState } from "react";
 import { BiTrash } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CreateListing = () => {
   const [photos, setPhotos] = useState([]);
@@ -35,6 +36,7 @@ const CreateListing = () => {
   });
 
   const navigate = useNavigate();
+  const creatorId = useSelector((state) => state.user._id);
 
   const handleSelectAmenities = (name) => {
     if(amenities?.includes(name)){
@@ -83,12 +85,45 @@ const CreateListing = () => {
     setPhotos(newPhotos);
   }
 
+  const handleSubmit = async (e) => {    
+    e.preventDefault();
+    try{
+        const listingForm = new FormData();
+        photos.forEach((photo) => listingForm.append("listingPhotos", photo));
+        listingForm.append("creator", creatorId);
+        listingForm.append('location', JSON.stringify(location));
+        listingForm.append('category', category);
+        listingForm.append('amenities', amenities);
+        listingForm.append('description', JSON.stringify(formDescription));        
+        listingForm.append('guestCount', guestCount);        
+        listingForm.append('bedroomCount', bedroomCount);
+        listingForm.append('bedCount', bedCount);
+        listingForm.append('bathroomCount', bathroomCount);
+        listingForm.append('type', type);
+        
+        
+
+        const response = await fetch("http://localhost:4000/properties/create", {
+            method: "POST",
+            body: listingForm
+        });
+
+        if(response.ok){
+            navigate("/");
+        }
+
+    }
+    catch(e){
+        console.log(e);
+    } 
+  };
+
   return (
     <div>
       <Navbar />
       <div className="create-listing">
         <h1>Publish Your Place</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="create-listing_step1">
                 <h2>Step 1: Tell us about your place</h2>
                 <hr />

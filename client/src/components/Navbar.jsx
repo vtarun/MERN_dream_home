@@ -14,11 +14,16 @@ const Navbar = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const handleLogout = () => {
+      dispatch(setLogout());
+      navigate("/login");
+  };
+  
   return (
     <nav className="navbar">
-      <a href="/">
+      <Link to="/">
         <img src={"/assets/logo.png"} alt="logo"/>
-      </a>
+      </Link>
       <div className="navbar_search">
         <input
           type="text"
@@ -34,14 +39,14 @@ const Navbar = () => {
         </IconButton>
       </div>
       <div className="navbar_right">
-        <a href={user ? "/create-listing" : "/login"} className='host'>Become A Host</a>
+        <Link to={user ? "/create-listing" : "/login"} className='host'>Become A Host</Link>
        </div>
       <button className="navbar_right_account" onClick={() => setDropdownMenu(!dropdownMenu)}>
         <Menu sx={{ color: variables.darkgrey}}/>
         {!user ? 
             <Person sx={{ color: variables.darkgrey }} /> :
             <img
-              src={`http://localhost:4000/uploads/${user.profileImagePath.replace(
+              src={`http://localhost:4000/${user.profileImagePath.replace(
                 "public",
                 ""
               )}`}
@@ -69,7 +74,7 @@ const Navbar = () => {
                     <Link to={`/${user._id}/properties`}>Property List</Link>
                     <Link to={`/${user._id}/reservations`}>Reservation List</Link>
                     <Link to="/create-listing">Become A Host</Link>
-                    <Link to="/login" onClick={() => {dispatch(setLogout())}}>Log Out</Link>
+                    <Link to="#" onClick={handleLogout}>Log Out</Link>
                 </>
                 )
             }
